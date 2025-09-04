@@ -1,6 +1,5 @@
 package prueba2;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -22,50 +21,61 @@ public class TheFile {
     }
 
     void listarTareas() throws IOException {
-        
         if (!file.exists() || file.length() == 0) {
             System.out.println("\n| No hay tareas para mostrar!");
             return;
         }
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String linea;
+        FileReader fr = new FileReader(file);
+        String contenido = "";
+        int caracter;
+
+        while ((caracter = fr.read()) != -1) {
+            contenido += (char) caracter;
+        }
+        fr.close();
+
+        String[] lineas = contenido.split("\n");
         int num = 1;
 
         System.out.println("\nLISTA DE TAREAS");
         System.out.println("====================");
 
-        while ((linea = br.readLine()) != null) {
-            System.out.println(num + ". " + linea);
-            num++;
+        for (String linea : lineas) {
+            if (!linea.trim().equals("")) {
+                System.out.println(num + ". " + linea);
+                num++;
+            }
         }
-        br.close();
     }
 
     void completarTarea(int numero) throws IOException {
-
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String linea;
+        FileReader fr = new FileReader(file);
         String contenido = "";
-        int numeroLinea = 1;
+        int caracter;
+
+        while ((caracter = fr.read()) != -1) {
+            contenido += (char) caracter;
+        }
+        fr.close();
+
+        String[] lineas = contenido.split("\n");
         boolean tareaEncontrada = false;
         boolean tareaYaCompletada = false;
 
-        while ((linea = br.readLine()) != null) {
-            if (numeroLinea == numero) {
+        for (int i = 0; i < lineas.length; i++) {
+            if (i + 1 == numero && !lineas[i].trim().equals("")) {
                 tareaEncontrada = true;
-                if (linea.startsWith("[ ]")) {
-                    linea = linea.replace("[ ]", "[✓]");
-                    System.out.println("\n✓ Tarea #" + numero + " completada: " + linea.substring(4));
+                if (lineas[i].startsWith("[ ]")) {
+                    lineas[i] = lineas[i].replace("[ ]", "[✓]");
+                    System.out.println("\n✓ Tarea #" + numero + " completada: " + lineas[i].substring(4));
                 } else {
                     tareaYaCompletada = true;
                     System.out.println("\n| Esa tarea ya esta marcada como completada!");
                 }
+                break;
             }
-            contenido += linea + "\n";
-            numeroLinea++;
         }
-        br.close();
 
         if (!tareaEncontrada) {
             System.out.println("\n| La tarea numero #" + numero + " no existe!");
@@ -74,17 +84,22 @@ public class TheFile {
 
         if (!tareaYaCompletada) {
             FileWriter fw = new FileWriter(file);
-            fw.write(contenido);
+            for (int i = 0; i < lineas.length; i++) {
+                fw.write(lineas[i]);
+                if (i < lineas.length - 1) {
+                    fw.write("\n");
+                }
+            }
             fw.close();
         }
     }
-    
+
     // esto solo es para evitar que escriba en completar tareas si no hay tareas para completar :D!
-    boolean existenTareas(){
+    boolean existenTareas() {
         if (!file.exists() || file.length() == 0) {
             System.out.println("\n| No hay tareas para completar!");
             return false;
-        }else{
+        } else {
             return true;
         }
     }
