@@ -51,13 +51,13 @@ public class EmpleadoMain {
                         manager.addSaleToEmployee(code, monto);
                         break;
                     case 4:
-                        System.out.println("`\n=== PAGAR EMPLEADO ===");
+                        System.out.println("\n=== PAGAR EMPLEADO ===");
                         System.out.print("\n| Ingrese el codigo del empleado: ");
                         int code2 = entrada.nextInt();
                         manager.payEmployee(code2);
                         break;
                     case 5:
-                        System.out.println("`\n=== DESPEDIR EMPLEADO ===");
+                        System.out.println("\n=== DESPEDIR EMPLEADO ===");
                         System.out.print("\n| Ingrese el codigo del empleado: ");
                         int code3 = entrada.nextInt();
                         manager.fireEmployee(code3);
